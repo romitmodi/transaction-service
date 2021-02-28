@@ -1,4 +1,4 @@
-package org.recruitment.problem.transaction.api;
+package org.recruitment.problem.transfer.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

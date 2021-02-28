@@ -1,4 +1,4 @@
-package org.recruitment.problem.transaction.api.model;
+package org.recruitment.problem.transfer.api.model;
 
 import java.time.LocalDateTime;
 

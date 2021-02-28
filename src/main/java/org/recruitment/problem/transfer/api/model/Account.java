@@ -1,4 +1,4 @@
-package org.recruitment.problem.transaction.api.model;
+package org.recruitment.problem.transfer.api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.recruitment.problem.transaction.api.model.enums.AccountStatus;
-import org.recruitment.problem.transaction.api.model.enums.AccountType;
+import org.recruitment.problem.transfer.api.model.enums.AccountStatus;
+import org.recruitment.problem.transfer.api.model.enums.AccountType;
 
 @Entity
 @Table(name = "account_details")
