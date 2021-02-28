@@ -24,24 +24,29 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public void preTransferValidation(Transaction transaction) {
+		transactionRepository.save(transaction);
 		Account sourceAccount = accountService.getAccountDetailsById(transaction.getSourceAccountNumber());
 		if (sourceAccount.getAccountBalance() < transaction.getAmount()) {
+			transaction.setStatus(TransactionStatus.FAILURE);
+			transactionRepository.save(transaction);
 			throw new InsufficentFundException(
 			        "Insufficent balance in Source Account: " + transaction.getSourceAccountNumber());
 		} else if (!sourceAccount.getAccountStatus().equals(AccountStatus.ACTIVE)) {
+			transaction.setStatus(TransactionStatus.FAILURE);
+			transactionRepository.save(transaction);
 			throw new AccountNotActiveException(
 			        "Source Account is not Active: " + transaction.getSourceAccountNumber());
 		}
 		Account destinationAccount = accountService.getAccountDetailsById(transaction.getDestinationAccountNumber());
 		if (!destinationAccount.getAccountStatus().equals(AccountStatus.ACTIVE)) {
+			transaction.setStatus(TransactionStatus.FAILURE);
+			transactionRepository.save(transaction);
 			throw new AccountNotActiveException(
 			        "Destination Account is not Active: " + transaction.getDestinationAccountNumber());
 		}
 
-		transaction.setStatus(TransactionStatus.FAILURE);
-		transactionRepository.save(transaction);
 	}
-
+	
 	@Override
 	public Transaction transferFund(Transaction transaction) {
 		Account sourceAccount = accountService.getAccountDetailsById(transaction.getSourceAccountNumber());
