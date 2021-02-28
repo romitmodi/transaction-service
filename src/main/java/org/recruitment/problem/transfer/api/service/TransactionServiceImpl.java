@@ -3,6 +3,8 @@ package org.recruitment.problem.transfer.api.service;
 import javax.transaction.Transactional;
 
 import org.recruitment.problem.transfer.api.dao.TransactionRepository;
+import org.recruitment.problem.transfer.api.exception.AccountNotActiveException;
+import org.recruitment.problem.transfer.api.exception.InsufficentFundException;
 import org.recruitment.problem.transfer.api.model.Account;
 import org.recruitment.problem.transfer.api.model.Transaction;
 import org.recruitment.problem.transfer.api.model.enums.AccountStatus;
@@ -23,14 +25,14 @@ public class TransactionServiceImpl implements TransactionService {
 	public void preTransferValidation(Transaction transaction) {
 		Account sourceAccount = accountService.getAccountDetailsById(transaction.getSourceAccountNumber());
 		if (sourceAccount.getAccountBalance() < transaction.getAmount()) {
-			throw new RuntimeException(
+			throw new InsufficentFundException(
 			        "Insufficent balance in Source Account: " + transaction.getSourceAccountNumber());
 		} else if (!sourceAccount.getAccountStatus().equals(AccountStatus.ACTIVE)) {
-			throw new RuntimeException("Source Account is not Active: " + transaction.getSourceAccountNumber());
+			throw new AccountNotActiveException("Source Account is not Active: " + transaction.getSourceAccountNumber());
 		}
 		Account destinationAccount = accountService.getAccountDetailsById(transaction.getDestinationAccountNumber());
 		if (!destinationAccount.getAccountStatus().equals(AccountStatus.ACTIVE)) {
-			throw new RuntimeException(
+			throw new AccountNotActiveException(
 			        "Destination Account is not Active: " + transaction.getDestinationAccountNumber());
 		}
 	}

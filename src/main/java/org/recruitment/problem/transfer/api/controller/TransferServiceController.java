@@ -2,6 +2,7 @@ package org.recruitment.problem.transfer.api.controller;
 
 import org.recruitment.problem.transfer.api.model.Transaction;
 import org.recruitment.problem.transfer.api.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TransferServiceController {
 
+	@Autowired
 	private TransactionService transactionService;
 
 	@PostMapping(value = "/transfer")
