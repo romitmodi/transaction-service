@@ -8,6 +8,7 @@ import org.recruitment.problem.transfer.api.exception.InsufficentFundException;
 import org.recruitment.problem.transfer.api.model.Account;
 import org.recruitment.problem.transfer.api.model.Transaction;
 import org.recruitment.problem.transfer.api.model.enums.AccountStatus;
+import org.recruitment.problem.transfer.api.model.enums.TransactionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,26 +29,30 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new InsufficentFundException(
 			        "Insufficent balance in Source Account: " + transaction.getSourceAccountNumber());
 		} else if (!sourceAccount.getAccountStatus().equals(AccountStatus.ACTIVE)) {
-			throw new AccountNotActiveException("Source Account is not Active: " + transaction.getSourceAccountNumber());
+			throw new AccountNotActiveException(
+			        "Source Account is not Active: " + transaction.getSourceAccountNumber());
 		}
 		Account destinationAccount = accountService.getAccountDetailsById(transaction.getDestinationAccountNumber());
 		if (!destinationAccount.getAccountStatus().equals(AccountStatus.ACTIVE)) {
 			throw new AccountNotActiveException(
 			        "Destination Account is not Active: " + transaction.getDestinationAccountNumber());
 		}
+
+		transaction.setStatus(TransactionStatus.FAILURE);
+		transactionRepository.save(transaction);
 	}
 
 	@Override
 	public Transaction transferFund(Transaction transaction) {
 		Account sourceAccount = accountService.getAccountDetailsById(transaction.getSourceAccountNumber());
 		sourceAccount.setAccountBalance(sourceAccount.getAccountBalance() - transaction.getAmount());
-		
+
 		Account destinationAccount = accountService.getAccountDetailsById(transaction.getDestinationAccountNumber());
 		destinationAccount.setAccountBalance(destinationAccount.getAccountBalance() + transaction.getAmount());
-		
+
 		accountService.createAndUpdateAccount(sourceAccount);
 		accountService.createAndUpdateAccount(destinationAccount);
-		
+		transaction.setStatus(TransactionStatus.SUCCESS);
 		return transactionRepository.save(transaction);
 	}
 }

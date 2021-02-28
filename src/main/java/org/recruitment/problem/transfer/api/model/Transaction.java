@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.recruitment.problem.transfer.api.model.enums.TransactionStatus;
+
 @Entity
 @Table(name = "transaction_details")
 public class Transaction {
@@ -32,6 +34,9 @@ public class Transaction {
 	@NotNull(message = "Transaction ammount can't be null")
 	@Column(name = "transaction_amount")
 	private Double amount;
+
+	@Column(name = "status")
+	private TransactionStatus status;
 
 	@Column(name = "description")
 	private String description;
@@ -105,4 +110,13 @@ public class Transaction {
 	public void setLocalDateTime(LocalDateTime localDateTime) {
 		this.localDateTime = localDateTime;
 	}
+
+	public TransactionStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TransactionStatus status) {
+		this.status = status;
+	}
+
 }
