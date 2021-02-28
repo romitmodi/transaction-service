@@ -18,8 +18,8 @@ public class TransferServiceController {
 	@PostMapping(value = "/transfer")
 	public ResponseEntity<Transaction> performTransfer(@RequestBody Transaction transaction) {
 		transactionService.preTransferValidation(transaction);
-		transactionService.transferFund(transaction);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		Transaction transactionResponse = transactionService.transferFund(transaction);
+		return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
 	}
 
 }
